@@ -16,7 +16,7 @@ const cors = require('cors');
 //       }
 // });
 
-app.use(cors())
+// app.use(cors())
 
 
 // var num = 100
