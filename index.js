@@ -5,6 +5,7 @@ const PORT = 4000;
 //New imports
 const http = require('http').Server(app);
 const cors = require('cors');
+const { timeEnd } = require('console');
 
 const socketIO = require('socket.io')(http, {
     cors: {
@@ -17,26 +18,39 @@ app.use(cors());
 
 var num = 100
 
-var timerId = setInterval(() => {
-    console.log("SSSS");
-}, 1000);
-clearInterval(timerId)
+var timerId = false;
 
 
 socketIO.on('connection', (socket) => {
     console.log("Usuario connectado:" + socket);
 
-    socket.on("start", () => {
+    function timerStart(){
         timerId = setInterval(() => {
             num--
             console.log(num);
-            socket.emit("envio", num)
+            socket.broadcast.emit("envio", num)
         }, 1000);
+    }
+
+    function timerStop(){
+        console.log("Pausa");
+        clearInterval(timerId)
+        timerId = false
+        socket.broadcast.emit("envio", num)
+    }
+
+
+
+
+    socket.on("start", () => {
+        timerStart();
     })
 
     socket.on("stop", () => {
-        console.log("Pausa");
-        clearInterval(timerId)
+        timerStop()
+    })
+
+    socket.on("estado", () => {
         socket.broadcast.emit("envio", num)
     })
 
