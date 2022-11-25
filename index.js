@@ -4,15 +4,17 @@ const PORT = process.env.PORT;
 
 //New imports
 const http = require('http').Server(app);
+var socketIO = require("socket.io")(http);
 const cors = require('cors');
 
-const socketIO = require('socket.io')(http, {
-    cors: {
-        origin: "https://sync-server-beige.vercel.app",
-        methods: ["GET", "POST"],
-        credentials: true
-      }
-});
+// const socketIO = new Server();
+// const socketIO = require('socket.io')(http, {
+//     cors: {
+//         origin: "https://sync-server-beige.vercel.app",
+//         methods: ["GET", "POST"],
+//         credentials: true
+//       }
+// });
 
 app.use(cors())
 
