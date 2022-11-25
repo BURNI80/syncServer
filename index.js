@@ -14,16 +14,43 @@ const socketIO = require('socket.io')(http, {
 
 app.use(cors());
 
-app.get('/', (req, res) => {
-    socketIO.on('connection', (socket) => {
-        console.log(`⚡: ${socket.id} user just connected!`);
-        // setInterval(() => {
-        //     res.send(console.log("AAA"))
-        // }, 1000);
-        socket.on('disconnect', () => {
-            console.log('🔥: A user disconnected');
-        });
+
+var num = 100
+
+var timerId = setInterval(() => {
+    console.log("SSSS");
+}, 1000);
+clearInterval(timerId)
+
+
+socketIO.on('connection', (socket) => {
+    console.log("Usuario connectado:" + socket);
+
+    socket.on("start", () => {
+        timerId = setInterval(() => {
+            num--
+            console.log(num);
+            socket.emit("envio", num)
+        }, 1000);
+    })
+
+    socket.on("stop", () => {
+        console.log("Pausa");
+        clearInterval(timerId)
+        socket.broadcast.emit("envio", num)
+    })
+
+
+
+
+
+    socket.on('disconnect', () => {
+        console.log('🔥: A user disconnected');
     });
+});
+
+
+app.get('/', (req, res) => {
     res.json({
         message: 'Hello world',
     });
