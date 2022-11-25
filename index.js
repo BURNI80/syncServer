@@ -5,7 +5,6 @@ const PORT = 4000;
 //New imports
 const http = require('http').Server(app);
 const cors = require('cors');
-const { timeEnd } = require('console');
 
 const socketIO = require('socket.io')(http, {
     cors: {
@@ -17,7 +16,6 @@ app.use(cors());
 
 
 var num = 100
-
 var timerId = false;
 
 
