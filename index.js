@@ -46,6 +46,11 @@ socketIO.on('connection', (socket) => {
         timerStart();
     })
 
+    socket.on("reset", () => {
+        num = 100;
+        socket.broadcast.emit("envio", num)
+    })
+
     socket.on("stop", () => {
         timerStop()
     })
