@@ -4,7 +4,7 @@ const PORT = process.env.PORT;
 
 //New imports
 const http = require('http').Server(app);
-// var socketIO = require("socket.io")(http);
+var socketIO = require("socket.io")(http);
 const cors = require('cors');
 
 // const socketIO = new Server();
@@ -16,54 +16,54 @@ const cors = require('cors');
 //       }
 // });
 
-// app.use(cors())
+app.use(cors())
 
 
-// var num = 100
-// var timerId = false;
+var num = 100
+var timerId = false;
 
 
-// socketIO.on('connection', (socket) => {
-//     console.log("Usuario connectado:" + socket);
+socketIO.on('connection', (socket) => {
+    console.log("Usuario connectado:" + socket);
 
-//     function timerStart(){
-//         timerId = setInterval(() => {
-//             num--
-//             console.log(num);
-//             socket.broadcast.emit("envio", num)
-//         }, 1000);
-//     }
+    function timerStart(){
+        timerId = setInterval(() => {
+            num--
+            console.log(num);
+            socket.broadcast.emit("envio", num)
+        }, 1000);
+    }
 
-//     function timerStop(){
-//         console.log("Pausa");
-//         clearInterval(timerId)
-//         timerId = false
-//         socket.broadcast.emit("envio", num)
-//     }
-
-
-
-
-//     socket.on("start", () => {
-//         timerStart();
-//     })
-
-//     socket.on("stop", () => {
-//         timerStop()
-//     })
-
-//     socket.on("estado", () => {
-//         socket.broadcast.emit("envio", num)
-//     })
+    function timerStop(){
+        console.log("Pausa");
+        clearInterval(timerId)
+        timerId = false
+        socket.broadcast.emit("envio", num)
+    }
 
 
 
 
+    socket.on("start", () => {
+        timerStart();
+    })
 
-//     socket.on('disconnect', () => {
-//         console.log('🔥: A user disconnected');
-//     });
-// });
+    socket.on("stop", () => {
+        timerStop()
+    })
+
+    socket.on("estado", () => {
+        socket.broadcast.emit("envio", num)
+    })
+
+
+
+
+
+    socket.on('disconnect', () => {
+        console.log('🔥: A user disconnected');
+    });
+});
 
 
 app.get('/', (req, res) => {
