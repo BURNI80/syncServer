@@ -8,7 +8,7 @@ const cors = require('cors');
 
 const socketIO = require('socket.io')(http, {
     cors: {
-        origin: "https://sync-server-beige.vercel.app"
+        origin: "http://localhost:3000"
     }
 });
 
