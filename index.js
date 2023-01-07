@@ -43,6 +43,9 @@ socketIO.on('connection', (socket) => {
 
 
     function syncData() {
+        var ahora = new Date();
+        console.log("Fecha actual:" +ahora)
+
 
         if (corriendo === false) {
 
