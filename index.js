@@ -111,6 +111,8 @@ socketIO.on('connection', (socket) => {
                         alertTime.setDate(dia);
                         alertTime.setMonth(mes);
                         alertTime.setFullYear(anio);
+                        console.log("fechaActual: "+fechaActual)
+                        console.log("Timer a comprobar:" +alertTime)
 
                         if (fechaActual >= alertTime) {
                             //Muestra que el timer deberia haber empezado
