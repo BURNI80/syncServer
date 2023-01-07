@@ -151,7 +151,9 @@ socketIO.on('connection', (socket) => {
                     }
 
                     //Saca los datos de la fecha del timer
-                    var fecha = getHoursAndMinutes(timersOrdenados[0].inicio)
+                    if(timersOrdenados.length > 0){
+                        var fecha = getHoursAndMinutes(timersOrdenados[0].inicio)
+                    }
 
                     //Manda ls fecha del primer timer y compreba si deberia empezar o no
                     inicioTimer(fecha.hours, fecha.minutes, fecha.day, fecha.month, fecha.year)
