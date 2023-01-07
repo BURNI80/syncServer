@@ -127,7 +127,6 @@ socketIO.on('connection', (socket) => {
                             clearInterval(intervaloComprovarHora);
                             intervaloComprovarHora = false;
                             console.log("Empieza a contar!");
-
                             // El tiempo ha empezado
                             timerStart()
 
@@ -197,6 +196,7 @@ socketIO.on('connection', (socket) => {
                     timerStart()
 
                 }
+                socket.broadcast.emit("timerID", timersOrdenados[0].idTemporizador)
                 socket.broadcast.emit("envio", tiempoActual)
             }, 1000);
         }
