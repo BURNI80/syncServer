@@ -38,7 +38,7 @@ function getDuracionByID(id) {
 
 socketIO.on('connection', (socket) => {
     // !DESCOMENTAR
-    console.log("Usuario connectadooooo:" + socket.id);
+    console.log("📡 Usuario connectado:" + socket.id);
     var ahora = new Date();
     console.log("Fecha actual:" +ahora)
 
