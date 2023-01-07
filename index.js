@@ -60,37 +60,37 @@ socketIO.on('connection', (socket) => {
             axios.get(urlApi + "api/timers").then(res => {
                 var timers = res.data;
 
-                function ordenarTimers(timers) {
-                    return timers.sort((a, b) => {
-                        const timeA = new Date(a.inicio);
-                        const timeB = new Date(b.inicio);
-                        return timeA - timeB;
-                    });
-                }
-
                 // function ordenarTimers(timers) {
-                //     // Sort the timers by inicio
-                //     timers.sort((a, b) => {
-                //       if (a.inicio < b.inicio) {
-                //         return -1;
-                //       } else if (a.inicio > b.inicio) {
-                //         return 1;
-                //       } else {
-                //         return 0;
-                //       }
+                //     return timers.sort((a, b) => {
+                //         const timeA = new Date(a.inicio);
+                //         const timeB = new Date(b.inicio);
+                //         return timeA - timeB;
                 //     });
+                // }
+
+                function ordenarTimers(timers) {
+                    // Sort the timers by inicio
+                    timers.sort((a, b) => {
+                      if (a.inicio < b.inicio) {
+                        return -1;
+                      } else if (a.inicio > b.inicio) {
+                        return 1;
+                      } else {
+                        return 0;
+                      }
+                    });
                   
-                //     // Get the current date and time
-                //     const now = new Date();
+                    // Get the current date and time
+                    const now = new Date();
                   
-                //     // Filter out timers whose inicio is in the past
-                //     const filteredTimers = timers.filter(timer => {
-                //       const startTime = new Date(timer.inicio);
-                //       return startTime >= now;
-                //     });
+                    // Filter out timers whose inicio is in the past
+                    const filteredTimers = timers.filter(timer => {
+                      const startTime = new Date(timer.inicio);
+                      return startTime >= now;
+                    });
                   
-                //     return filteredTimers;
-                //   }
+                    return filteredTimers;
+                  }
 
                 //Timers Ordenados
                 timersOrdenados = ordenarTimers(timers);
