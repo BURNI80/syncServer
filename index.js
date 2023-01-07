@@ -183,7 +183,9 @@ socketIO.on('connection', (socket) => {
         if (fechaActual < fechaTimer) {
             syncData()
         } else {
-            var duracion = getDuracionByID(timersOrdenados[0].idCategoria)
+            if(timersOrdenados.length > 0){
+                var duracion = getDuracionByID(timersOrdenados[0].idCategoria)
+            }
             tiempoActual = duracion * 60
             corriendo = true
             timerId = setInterval(() => {
