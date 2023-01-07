@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT;
-// const PORT = 3002;
+// const PORT = process.env.PORT;
+const PORT = 3002;
 const urlApi = "https://apitimersagc.azurewebsites.net/";
 
 //New imports
@@ -39,12 +39,16 @@ function getDuracionByID(id) {
 socketIO.on('connection', (socket) => {
     // !DESCOMENTAR
     console.log("📡 Usuario connectado:" + socket.id);
-    
-    
-    
+
+
+
     function syncData() {
         var ahora = new Date();
-        console.log("Fecha actual:" +ahora)
+        console.log("Fecha actual Servidor:" + ahora)
+        var fechaActual = new Date();
+        let unahora = 60 * 60 * 1000; // una hora en milisegundos
+        fechaActual = new Date(fechaActual.getTime() + unahora);
+        console.log("Fecha España: " + fechaActual)
 
 
         if (corriendo === false) {
@@ -74,26 +78,28 @@ socketIO.on('connection', (socket) => {
                 function ordenarTimers(timers) {
                     // Sort the timers by inicio
                     timers.sort((a, b) => {
-                      if (a.inicio < b.inicio) {
-                        return -1;
-                      } else if (a.inicio > b.inicio) {
-                        return 1;
-                      } else {
-                        return 0;
-                      }
+                        if (a.inicio < b.inicio) {
+                            return -1;
+                        } else if (a.inicio > b.inicio) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
                     });
-                  
+
                     // Get the current date and time
-                    const now = new Date();
-                  
+                    var now = new Date();
+                    let unahora = 60 * 60 * 1000; // una hora en milisegundos
+                    now = new Date(now.getTime() + unahora);
+
                     // Filter out timers whose inicio is in the past
                     const filteredTimers = timers.filter(timer => {
-                      const startTime = new Date(timer.inicio);
-                      return startTime >= now;
+                        const startTime = new Date(timer.inicio);
+                        return startTime >= now;
                     });
-                  
+
                     return filteredTimers;
-                  }
+                }
 
                 //Timers Ordenados
                 timersOrdenados = ordenarTimers(timers);
@@ -105,15 +111,17 @@ socketIO.on('connection', (socket) => {
                 intervaloComprovarHora = setInterval(() => {
                     function inicioTimer(hora, minuto, dia, mes, anio) {
                         var fechaActual = new Date();
+                        let unahora = 60 * 60 * 1000; // una hora en milisegundos
+                        fechaActual = new Date(fechaActual.getTime() + unahora);
+
+
+
                         var alertTime = new Date();
-                        alertTime.setHours((hora-1));
+                        alertTime.setHours(hora);
                         alertTime.setMinutes(minuto);
                         alertTime.setDate(dia);
                         alertTime.setMonth(mes);
                         alertTime.setFullYear(anio);
-                        console.log("fechaActual: "+fechaActual)
-                        console.log("Timer a comprobar:" +alertTime)
-
                         if (fechaActual >= alertTime) {
                             //Muestra que el timer deberia haber empezado
                             clearInterval(intervaloComprovarHora);
@@ -166,9 +174,11 @@ socketIO.on('connection', (socket) => {
     function timerStart() {
         var fechaTimer = new Date(timersOrdenados[0].inicio);
         var fechaActual = new Date();
-        if(fechaActual < fechaTimer){
+        let unahora = 60 * 60 * 1000; // una hora en milisegundos
+        fechaActual = new Date(fechaActual.getTime() + unahora);
+        if (fechaActual < fechaTimer) {
             syncData()
-        }else{
+        } else {
             var duracion = getDuracionByID(timersOrdenados[0].idCategoria)
             tiempoActual = duracion * 60
             corriendo = true
@@ -185,7 +195,7 @@ socketIO.on('connection', (socket) => {
                     timersOrdenados.shift()
                     // Inicia el siguiente
                     timerStart()
-    
+
                 }
                 socket.broadcast.emit("envio", tiempoActual)
             }, 1000);
