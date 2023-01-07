@@ -172,6 +172,7 @@ socketIO.on('connection', (socket) => {
 
     function timerStart() {
         var fechaTimer = new Date(timersOrdenados[0].inicio);
+        var idTimer = timersOrdenados[0].idTemporizador
         var fechaActual = new Date();
         let unahora = 60 * 60 * 1000; // una hora en milisegundos
         fechaActual = new Date(fechaActual.getTime() + unahora);
@@ -196,7 +197,7 @@ socketIO.on('connection', (socket) => {
                     timerStart()
 
                 }
-                socket.broadcast.emit("timerID", timersOrdenados[0].idTemporizador)
+                socket.broadcast.emit("timerID", idTimer)
                 socket.broadcast.emit("envio", tiempoActual)
             }, 1000);
         }
