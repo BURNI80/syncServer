@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
-// const PORT = 3002;
+// const PORT = process.env.PORT || 3000;
+const PORT = 3002;
 const urlApi = "https://apitimersagc.azurewebsites.net/";
 
 //New imports
@@ -151,7 +151,7 @@ socketIO.on('connection', (socket) => {
                     }
 
                     //Saca los datos de la fecha del timer
-                    if(timersOrdenados.length > 0){
+                    if (timersOrdenados.length > 0) {
                         var fecha = getHoursAndMinutes(timersOrdenados[0].inicio)
                         //Manda ls fecha del primer timer y compreba si deberia empezar o no
                         inicioTimer(fecha.hours, fecha.minutes, fecha.day, fecha.month, fecha.year)
@@ -173,17 +173,15 @@ socketIO.on('connection', (socket) => {
 
 
     function timerStart() {
-        if(timersOrdenados.length > 0){
+        if (timersOrdenados.length > 0) {
             var fechaTimer = new Date(timersOrdenados[0].inicio);
             var idTimer = timersOrdenados[0].idTemporizador
-        }
-        var fechaActual = new Date();
-        let unahora = 60 * 60 * 1000; // una hora en milisegundos
-        fechaActual = new Date(fechaActual.getTime() + unahora);
-        if (fechaActual < fechaTimer) {
-            syncData()
-        } else {
-            if(timersOrdenados.length > 0){
+            var fechaActual = new Date();
+            let unahora = 60 * 60 * 1000; // una hora en milisegundos
+            fechaActual = new Date(fechaActual.getTime() + unahora);
+            if (fechaActual < fechaTimer) {
+                syncData()
+            } else {
                 var duracion = getDuracionByID(timersOrdenados[0].idCategoria)
                 tiempoActual = duracion * 60
                 corriendo = true
@@ -200,7 +198,7 @@ socketIO.on('connection', (socket) => {
                         timersOrdenados.shift()
                         // Inicia el siguiente
                         timerStart()
-    
+
                     }
                     socket.broadcast.emit("timerID", idTimer)
                     socket.broadcast.emit("envio", tiempoActual)
