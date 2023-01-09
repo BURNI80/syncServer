@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT;
-// const PORT = 3002;
+// const PORT = process.env.PORT;
+const PORT = 3002;
 const urlApi = "https://apitimersagc.azurewebsites.net/";
 
 //New imports
