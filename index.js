@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 // const PORT = 3002;
 const urlApi = "https://apitimersagc.azurewebsites.net/";
 
@@ -51,8 +51,8 @@ socketIO.on('connection', (socket) => {
         console.log("Fecha España: " + fechaActual)
 
 
+        
         if (corriendo === false) {
-
             //Pausa Intervalos Exisztentes
             clearInterval(intervaloComprovarHora);
             intervaloComprovarHora = false;
@@ -113,9 +113,6 @@ socketIO.on('connection', (socket) => {
                         var fechaActual = new Date();
                         let unahora = 60 * 60 * 1000; // una hora en milisegundos
                         fechaActual = new Date(fechaActual.getTime() + unahora);
-
-
-
                         var alertTime = new Date();
                         alertTime.setHours(hora);
                         alertTime.setMinutes(minuto);
@@ -184,8 +181,8 @@ socketIO.on('connection', (socket) => {
             } else {
                 var duracion = getDuracionByID(timersOrdenados[0].idCategoria)
                 tiempoActual = duracion * 60
-                corriendo = true
                 timerId = setInterval(() => {
+                    corriendo = true
                     tiempoActual--
                     console.log(tiempoActual);
                     if (tiempoActual <= 0) {
@@ -200,10 +197,14 @@ socketIO.on('connection', (socket) => {
                         timerStart()
 
                     }
-                    socket.broadcast.emit("timerID", idTimer)
-                    socket.broadcast.emit("envio", tiempoActual)
+                    else{
+                        socket.broadcast.emit("timerID", idTimer)
+                        socket.broadcast.emit("envio", tiempoActual)
+                    }
                 }, 1000);
             }
+        }else{
+            syncData()
         }
     }
 
