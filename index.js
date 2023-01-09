@@ -245,6 +245,6 @@ app.get('/', (req, res) => {
     });
 });
 
-http.listen(PORT, () => {
-    console.log(`Server listening on ${PORT}`);
+http.listen(process.env.PORT, () => {
+    console.log(`Server listening on ${process.env.PORT}`);
 });
