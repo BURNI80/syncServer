@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT;
-// const PORT = 3002;
+// const PORT = process.env.PORT;
+const PORT = 3002;
 const urlApi = "https://apitimersagc.azurewebsites.net/";
 
 //New imports
@@ -122,6 +122,7 @@ socketIO.on('connection', (socket) => {
                         alertTime.setDate(dia);
                         alertTime.setMonth(mes);
                         alertTime.setFullYear(anio);
+                        console.log("Comprobando Hora");
                         if (fechaActual >= alertTime) {
                             //Muestra que el timer deberia haber empezado
                             clearInterval(intervaloComprovarHora);
@@ -185,27 +186,27 @@ socketIO.on('connection', (socket) => {
         } else {
             if(timersOrdenados.length > 0){
                 var duracion = getDuracionByID(timersOrdenados[0].idCategoria)
+                tiempoActual = duracion * 60
+                corriendo = true
+                timerId = setInterval(() => {
+                    tiempoActual--
+                    console.log(tiempoActual);
+                    if (tiempoActual <= 0) {
+                        // Ha terminado el timer
+                        console.log("Timer Terminado");
+                        clearInterval(timerId)
+                        timerId = false
+                        corriendo = false
+                        // Elimina el timer gastado
+                        timersOrdenados.shift()
+                        // Inicia el siguiente
+                        timerStart()
+    
+                    }
+                    socket.broadcast.emit("timerID", idTimer)
+                    socket.broadcast.emit("envio", tiempoActual)
+                }, 1000);
             }
-            tiempoActual = duracion * 60
-            corriendo = true
-            timerId = setInterval(() => {
-                tiempoActual--
-                console.log(tiempoActual);
-                if (tiempoActual <= 0) {
-                    // Ha terminado el timer
-                    console.log("Timer Terminado");
-                    clearInterval(timerId)
-                    timerId = false
-                    corriendo = false
-                    // Elimina el timer gastado
-                    timersOrdenados.shift()
-                    // Inicia el siguiente
-                    timerStart()
-
-                }
-                socket.broadcast.emit("timerID", idTimer)
-                socket.broadcast.emit("envio", tiempoActual)
-            }, 1000);
         }
     }
 
