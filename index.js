@@ -51,7 +51,7 @@ socketIO.on('connection', (socket) => {
         console.log("Fecha España: " + fechaActual)
 
 
-        
+
         if (corriendo === false) {
             //Pausa Intervalos Exisztentes
             clearInterval(intervaloComprovarHora);
@@ -163,13 +163,13 @@ socketIO.on('connection', (socket) => {
 
     }
 
-    function panic(){
+    function panic() {
         clearInterval(intervaloComprovarHora);
         corriendo = false;
         intervaloComprovarHora = false;
         clearInterval(timerId);
         timerId = false;
-        syncData() 
+        syncData()
     }
 
 
@@ -199,6 +199,8 @@ socketIO.on('connection', (socket) => {
                     corriendo = true
                     tiempoActual--
                     console.log(tiempoActual);
+                    socket.broadcast.emit("timerID", idTimer)
+                    socket.broadcast.emit("envio", tiempoActual)
                     if (tiempoActual <= 0) {
                         // Ha terminado el timer
                         console.log("Timer Terminado");
@@ -209,15 +211,11 @@ socketIO.on('connection', (socket) => {
                         timersOrdenados.shift()
                         // Inicia el siguiente
                         timerStart()
+                    }
 
-                    }
-                    else{
-                        socket.broadcast.emit("timerID", idTimer)
-                        socket.broadcast.emit("envio", tiempoActual)
-                    }
                 }, 1000);
             }
-        }else{
+        } else {
             syncData()
         }
     }
