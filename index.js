@@ -165,6 +165,7 @@ socketIO.on('connection', (socket) => {
 
     function panic(){
         clearInterval(intervaloComprovarHora);
+        corriendo = false;
         intervaloComprovarHora = false;
         clearInterval(timerId);
         timerId = false;
