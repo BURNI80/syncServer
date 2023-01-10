@@ -164,6 +164,7 @@ socketIO.on('connection', (socket) => {
     }
 
     function panic() {
+        console.log("Panico Ejecutado");
         clearInterval(intervaloComprovarHora);
         corriendo = false;
         intervaloComprovarHora = false;
@@ -188,8 +189,8 @@ socketIO.on('connection', (socket) => {
             var idTimer = timersOrdenados[0].idTemporizador
             var fechaActual = new Date();
             let unahora = 60 * 60 * 1000; // una hora en milisegundos
-            fechaActual = new Date(fechaActual.getTime() + unahora);
-            if (fechaActual < fechaTimer) {
+            var fechaActualizada = new Date(fechaActual.getTime() + unahora);
+            if (fechaActualizada < fechaTimer) {
                 syncData()
             } else {
                 var duracion = getDuracionByID(timersOrdenados[0].idCategoria)
