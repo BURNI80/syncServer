@@ -106,7 +106,7 @@ socketIO.on('connection', (socket) => {
                 console.log("Datos Sincronizados");
 
 
-
+                console.log("Comprobacion Creada.");
                 // Cada segungo comprueba si el timer deberia haber empezado
                 intervaloComprovarHora = setInterval(() => {
                     function inicioTimer(hora, minuto, dia, mes, anio) {
@@ -163,11 +163,23 @@ socketIO.on('connection', (socket) => {
 
     }
 
+    function panic(){
+        clearInterval(intervaloComprovarHora);
+        intervaloComprovarHora = false;
+        clearInterval(timerId);
+        timerId = false;
+        syncData() 
+    }
+
 
     socket.on("syncData", () => {
         syncData();
     })
 
+    socket.on("panic", () => {
+        panic();
+
+    })
 
     function timerStart() {
         if (timersOrdenados.length > 0) {
@@ -181,6 +193,7 @@ socketIO.on('connection', (socket) => {
             } else {
                 var duracion = getDuracionByID(timersOrdenados[0].idCategoria)
                 tiempoActual = duracion * 60
+                console.log("Cuenta Atras Creada.");
                 timerId = setInterval(() => {
                     corriendo = true
                     tiempoActual--
