@@ -108,10 +108,10 @@ function getHoursAndMinutes(timeString) {
 
 socketIO.on('connection', (socket) => {
     //! **************************
-    // console.log("📡 Usuario connectado:" + socket.id);
+    console.log("📡 Usuario connectado:" + socket.id);
 
 
-    // // *SyncData vieja
+    // *SyncData vieja
     // function syncData() {
     //     var ahora = new Date();
     //     console.log("Fecha actual Servidor:" + ahora)
@@ -232,7 +232,7 @@ socketIO.on('connection', (socket) => {
 
 
     // }
-    // // *Funcion vieja
+    // *Funcion vieja
     // function timerStart() {
     //     if (timersOrdenados.length > 0) {
     //         var fechaTimer = new Date(timersOrdenados[0].inicio);
