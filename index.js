@@ -19,6 +19,7 @@ const socketIO = require("socket.io")(http, {
 
 app.use(cors())
 
+
 var timerId = false;
 var intervaloComprovarHora = false;
 var corriendo = false
@@ -36,12 +37,45 @@ function getDuracionByID(id) {
     return null;
 }
 
+function ordenarTimers(timers) {
+    // Sort the timers by inicio
+    timers.sort((a, b) => {
+        if (a.inicio < b.inicio) {
+            return -1;
+        } else if (a.inicio > b.inicio) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+    // Get the current date and time
+    var now = new Date();
+    let unahora = 60 * 60 * 1000; // una hora en milisegundos
+    now = new Date(now.getTime() + unahora);
+
+    // Filter out timers whose inicio is in the past
+    const filteredTimers = timers.filter(timer => {
+        const startTime = new Date(timer.inicio);
+        return startTime >= now;
+    });
+
+    return filteredTimers;
+}
+
+function calcularDiferencia(date1, date2) {
+    var diffInMilliseconds = Math.abs(date1 - date2);
+    return Math.round(diffInMilliseconds / (1000 * 60));
+}
+
+
+
+
 socketIO.on('connection', (socket) => {
     // !DESCOMENTAR
     console.log("📡 Usuario connectado:" + socket.id);
 
 
-
+    // *SyncData vieja
     function syncData() {
         var ahora = new Date();
         console.log("Fecha actual Servidor:" + ahora)
@@ -162,27 +196,7 @@ socketIO.on('connection', (socket) => {
 
 
     }
-
-    function panic() {
-        console.log("Panico Ejecutado");
-        clearInterval(intervaloComprovarHora);
-        corriendo = false;
-        intervaloComprovarHora = false;
-        clearInterval(timerId);
-        timerId = false;
-        syncData()
-    }
-
-
-    socket.on("syncData", () => {
-        syncData();
-    })
-
-    socket.on("panic", () => {
-        panic();
-
-    })
-
+    // *Funcion vieja
     function timerStart() {
         if (timersOrdenados.length > 0) {
             var fechaTimer = new Date(timersOrdenados[0].inicio);
@@ -221,24 +235,145 @@ socketIO.on('connection', (socket) => {
         }
     }
 
+    // Simplemente ordena los timers y descarta los viejos
+    // function syncData() {
+    //     var ahora = new Date();
+    //     console.log("Fecha actual Servidor:" + ahora)
+    //     var fechaActual = new Date();
+    //     let unahora = 60 * 60 * 1000; // una hora en milisegundos
+    //     fechaActual = new Date(fechaActual.getTime() + unahora);
+    //     console.log("Fecha España: " + fechaActual)
 
-    // function timerStop() {
-    //     console.log("Pausa");
-    //     clearInterval(timerId)
-    //     timerId = false
-    //     socket.broadcast.emit("envio", tiempoActual)
+    //     //guarda las categorias
+    //     axios.get(urlApi + "api/CategoriasTimer").then(res => {
+    //         categoriasTimer = res.data
+    //         console.log("Categorias sincronizadas");
+    //     })
+
+    //     //guarda los timers
+    //     axios.get(urlApi + "api/timers").then(res => {
+    //         var timers = res.data;
+
+    //         timersOrdenados = ordenarTimers(timers);
+    //         console.log("Timers sincronizados");
+    //     })
+
     // }
 
-    // socket.on("reset", () => {
-    //     console.log("reset");
-    //     tiempoActual = 100;
-    //     socket.broadcast.emit("envio", tiempoActual)
+
+    
+    
+    
+    // function startTimersManul(tiempo) {
+    //     console.log("Inicio manual.");
+    //     var now = new Date();
+    //     var fechaTimer = timersOrdenados[0].inicio;
+    //     var diffMinutos = calcularDiferencia(now, fechaTimer)
+    //     axios.put(urlApi + "/api/timers/IncreaseTimers/" + diffMinutos).then(res => {
+    //         if (res.status === 200) {
+    //             console.log("Timers incrementados en " + diffMinutos + " minutos");
+    //             syncData();
+    //             //! tengo que forzar la eliminacion del plrimer timer
+    //         }
+    //     })
+
+    //     var tiempoRestante = getDuracionByID(timersOrdenados[0].idCategoria)
+    //     var intervaloTimer = setInterval(() => {
+    //         tiempoRestante--;
+    //         console.log(tiempoRestante);
+    //         if (tiempoRestante <= 0) {
+    //             console.log("Timer Terminado!");
+    //             clearInterval(intervaloTimer)
+    //             intervaloTimer = false
+    //             timersOrdenados.shift()
+    //             if (timersOrdenados.length > 0) {
+    //                 continuarTimers()
+    //             } else {
+    //                 syncData()
+    //             }
+    //         }
+    //     }, 1000);
+
+    // }
+
+    // function continuarTimers() {
+        
+    //     intervaloComprovarHora = setInterval(() => {
+    //         function inicioTimer(hora, minuto, dia, mes, anio) {
+    //             var fechaActual = new Date();
+    //             let unahora = 60 * 60 * 1000; // una hora en milisegundos
+    //             fechaActual = new Date(fechaActual.getTime() + unahora);
+    //             var alertTime = new Date();
+    //             alertTime.setHours(hora);
+    //             alertTime.setMinutes(minuto);
+    //             alertTime.setDate(dia);
+    //             alertTime.setMonth(mes);
+    //             alertTime.setFullYear(anio);
+    //             if (fechaActual >= alertTime) {
+    //                 //Muestra que el timer deberia haber empezado
+    //                 clearInterval(intervaloComprovarHora);
+    //                 intervaloComprovarHora = false;
+    //                 console.log("Empieza a contar!");
+    //                 // El tiempo ha empezado
+    //                 timerStart()
+
+
+
+
+    //             }
+    //         }
+
+
+
+    //         // Funcion sacar datos de la fecha del timer
+    //         function getHoursAndMinutes(timeString) {
+    //             const date = new Date(timeString);
+    //             return {
+    //                 day: date.getDate(),
+    //                 month: date.getMonth(),
+    //                 year: date.getFullYear(),
+    //                 hours: date.getHours(),
+    //                 minutes: date.getMinutes()
+    //             };
+    //         }
+
+    //         //Saca los datos de la fecha del timer
+    //         if (timersOrdenados.length > 0) {
+    //             var fecha = getHoursAndMinutes(timersOrdenados[0].inicio)
+    //             //Manda ls fecha del primer timer y compreba si deberia empezar o no
+    //             inicioTimer(fecha.hours, fecha.minutes, fecha.day, fecha.month, fecha.year)
+    //         }
+
+    //     })
+    // }
+
+
+    // socket.on("start", () => {
+    //     startTimersManul();
+
     // })
 
-    // socket.on("stop", () => {
-    //     timerStop()
-    // })
 
+    socket.on("syncData", () => {
+        syncData();
+    })
+
+
+
+    function panic() {
+        console.log("Panico Ejecutado");
+        clearInterval(intervaloComprovarHora);
+        corriendo = false;
+        intervaloComprovarHora = false;
+        clearInterval(timerId);
+        timerId = false;
+        syncData()
+    }
+
+    socket.on("panic", () => {
+        panic();
+
+    })
 
     socket.on('disconnect', () => {
         console.log('🔥: A user disconnected');
