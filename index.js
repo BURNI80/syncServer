@@ -273,12 +273,12 @@ socketIO.on('connection', (socket) => {
             // Muestra la hora del sistema donde esta hosteado
             //! **************************
     
-            // var ahora = new Date();
-            // console.log("Fecha actual Servidor:" + ahora)
-            // var fechaActual = new Date();
-            // let unahora = 60 * 60 * 1000; // una hora en milisegundos
-            // fechaActual = new Date(fechaActual.getTime() + unahora);
-            // console.log("Fecha España: " + fechaActual)
+            var ahora = new Date();
+            console.log("Fecha actual Servidor:" + ahora)
+            var fechaActual = new Date();
+            let unahora = 60 * 60 * 1000; // una hora en milisegundos
+            fechaActual = new Date(fechaActual.getTime() + unahora);
+            console.log("Fecha España: " + fechaActual)
     
             //guarda las categorias
             axios.get(urlApi + "api/CategoriasTimer").then(res => {
