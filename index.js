@@ -20,13 +20,10 @@ const socketIO = require("socket.io")(http, {
 app.use(cors())
 
 
-var timerId = false;
 var intervaloComprovarHora = false;
 var corriendo = false
 var timersOrdenados = []
 var categoriasTimer = []
-var tiempoActual = 0
-var fechaInicioManual = null;
 
 // Funcion en la que mandas el ID del timer y retorna los segundos que dura
 function getDuracionByID(id) {
@@ -82,12 +79,7 @@ function ordenarTimers(timers, fechaParam) {
 function calcularDiferencia(date1, date2) {
     var diffInMilliseconds = date1 - date2;
     var solucion = diffInMilliseconds / (1000 * 60)
-    if (solucion > 0) {
         return Math.ceil(solucion);
-    }
-    else {
-        return Math.floor(solucion);
-    }
 }
 
 
@@ -339,9 +331,9 @@ socketIO.on('connection', (socket) => {
             fechaTimer.setFullYear(anio);
             console.log("Comp creada");
             var fechaActualSync = addUnaHora(new Date());
-            if (fechaActualSync < fechaTimer) {
-                syncData();
-            }
+            // if (fechaActualSync < fechaTimer) {
+            //     syncData();
+            // }
 
             intervaloComprovarHora = setInterval(() => {
                 var fechaActual = addUnaHora(new Date());
