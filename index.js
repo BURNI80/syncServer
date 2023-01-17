@@ -103,171 +103,6 @@ socketIO.on('connection', (socket) => {
     console.log("📡 Usuario connectado:" + socket.id);
 
 
-    // *SyncData vieja
-    // function syncData() {
-    //     var ahora = new Date();
-    //     console.log("Fecha actual Servidor:" + ahora)
-    //     var fechaActual = new Date();
-    //     let unahora = 60 * 60 * 1000; // una hora en milisegundos
-    //     fechaActual = new Date(fechaActual.getTime() + unahora);
-    //     console.log("Fecha España: " + fechaActual)
-
-
-
-    //     if (corriendo === false) {
-    //         //Pausa Intervalos Exisztentes
-    //         clearInterval(intervaloComprovarHora);
-    //         intervaloComprovarHora = false;
-
-    //         axios.get(urlApi + "api/CategoriasTimer").then(res => {
-    //             categoriasTimer = res.data
-    //         })
-
-
-
-    //         //Busca los timers y los ordena por fecha
-    //         axios.get(urlApi + "api/timers").then(res => {
-    //             var timers = res.data;
-
-    //             // function ordenarTimers(timers) {
-    //             //     return timers.sort((a, b) => {
-    //             //         const timeA = new Date(a.inicio);
-    //             //         const timeB = new Date(b.inicio);
-    //             //         return timeA - timeB;
-    //             //     });
-    //             // }
-
-    //             function ordenarTimers(timers) {
-    //                 // Sort the timers by inicio
-    //                 timers.sort((a, b) => {
-    //                     if (a.inicio < b.inicio) {
-    //                         return -1;
-    //                     } else if (a.inicio > b.inicio) {
-    //                         return 1;
-    //                     } else {
-    //                         return 0;
-    //                     }
-    //                 });
-
-    //                 // Get the current date and time
-    //                 var now = new Date();
-    //                 let unahora = 60 * 60 * 1000; // una hora en milisegundos
-    //                 now = new Date(now.getTime() + unahora);
-
-    //                 // Filter out timers whose inicio is in the past
-    //                 const filteredTimers = timers.filter(timer => {
-    //                     const startTime = new Date(timer.inicio);
-    //                     return startTime >= now;
-    //                 });
-
-    //                 return filteredTimers;
-    //             }
-
-    //             //Timers Ordenados
-    //             timersOrdenados = ordenarTimers(timers);
-    //             console.log("Datos Sincronizados");
-
-
-    //             console.log("Comprobacion Creada.");
-    //             // Cada segungo comprueba si el timer deberia haber empezado
-    //             intervaloComprovarHora = setInterval(() => {
-    //                 function inicioTimer(hora, minuto, dia, mes, anio) {
-    //                     var fechaActual = new Date();
-    //                     let unahora = 60 * 60 * 1000; // una hora en milisegundos
-    //                     fechaActual = new Date(fechaActual.getTime() + unahora);
-    //                     var alertTime = new Date();
-    //                     alertTime.setHours(hora);
-    //                     alertTime.setMinutes(minuto);
-    //                     alertTime.setDate(dia);
-    //                     alertTime.setMonth(mes);
-    //                     alertTime.setFullYear(anio);
-    //                     if (fechaActual >= alertTime) {
-    //                         //Muestra que el timer deberia haber empezado
-    //                         clearInterval(intervaloComprovarHora);
-    //                         intervaloComprovarHora = false;
-    //                         console.log("Empieza a contar!");
-    //                         // El tiempo ha empezado
-    //                         timerStart()
-
-
-
-
-    //                     }
-    //                 }
-
-
-
-    //                 // Funcion sacar datos de la fecha del timer
-    //                 function getHoursAndMinutes(timeString) {
-    //                     const date = new Date(timeString);
-    //                     return {
-    //                         day: date.getDate(),
-    //                         month: date.getMonth(),
-    //                         year: date.getFullYear(),
-    //                         hours: date.getHours(),
-    //                         minutes: date.getMinutes()
-    //                     };
-    //                 }
-
-    //                 //Saca los datos de la fecha del timer
-    //                 if (timersOrdenados.length > 0) {
-    //                     var fecha = getHoursAndMinutes(timersOrdenados[0].inicio)
-    //                     //Manda ls fecha del primer timer y compreba si deberia empezar o no
-    //                     inicioTimer(fecha.hours, fecha.minutes, fecha.day, fecha.month, fecha.year)
-    //                 }
-
-
-    //             }, 1000);
-    //         })
-
-    //     }
-
-
-    // }
-    // *Funcion vieja
-    // function timerStart() {
-    //     if (timersOrdenados.length > 0) {
-    //         var fechaTimer = new Date(timersOrdenados[0].inicio);
-    //         var idTimer = timersOrdenados[0].idTemporizador
-    //         var fechaActual = new Date();
-    //         let unahora = 60 * 60 * 1000; // una hora en milisegundos
-    //         var fechaActualizada = new Date(fechaActual.getTime() + unahora);
-    //         if (fechaActualizada < fechaTimer) {
-    //             syncData()
-    //         } else {
-    //             var duracion = getDuracionByID(timersOrdenados[0].idCategoria)
-    //             tiempoActual = duracion * 60
-    //             console.log("Cuenta Atras Creada.");
-    //             timerId = setInterval(() => {
-    //                 corriendo = true
-    //                 tiempoActual--
-    //                 console.log(tiempoActual);
-    //                 socket.broadcast.emit("timerID", idTimer)
-    //                 socket.broadcast.emit("envio", tiempoActual)
-    //                 if (tiempoActual <= 0) {
-    //                     // Ha terminado el timer
-    //                     console.log("Timer Terminado");
-    //                     clearInterval(timerId)
-    //                     timerId = false
-    //                     corriendo = false
-    //                     // Elimina el timer gastado
-    //                     timersOrdenados.shift()
-    //                     // Inicia el siguiente
-    //                     timerStart()
-    //                 }
-
-    //             }, 1000);
-    //         }
-    //     } else {
-    //         syncData()
-    //     }
-    // }
-
-
-
-
-
-
     function syncData(fecha) {
         if(corriendo === false){
             // Muestra la hora del sistema donde esta hosteado
@@ -334,19 +169,20 @@ socketIO.on('connection', (socket) => {
             // if (fechaActualSync < fechaTimer) {
             //     syncData();
             // }
-
-            intervaloComprovarHora = setInterval(() => {
-                var fechaActual = addUnaHora(new Date());
-                console.log(fechaActual)
-                console.log(fechaTimer)
-                console.log("----------------------------");
-                if (fechaActual >= fechaTimer) {
-                    console.log("Empieza el timer");
-                    clearInterval(intervaloComprovarHora);
-                    intervaloComprovarHora = false;
-                    timerStart()
-                }
-            }, 1000)
+            if (corriendo === false){
+                intervaloComprovarHora = setInterval(() => {
+                    var fechaActual = addUnaHora(new Date());
+                    console.log(fechaActual)
+                    console.log(fechaTimer)
+                    console.log("----------------------------");
+                    if (fechaActual >= fechaTimer) {
+                        console.log("Empieza el timer");
+                        clearInterval(intervaloComprovarHora);
+                        intervaloComprovarHora = false;
+                        timerStart()
+                    }
+                }, 1000)
+            }
         }
     }
 
