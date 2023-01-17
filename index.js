@@ -134,6 +134,8 @@ socketIO.on('connection', (socket) => {
 
     function startTimersManul() {
         console.log("Inicio manual.");
+        clearInterval(intervaloComprovarHora);
+        intervaloComprovarHora = false;
         var fechaInicioManual = new Date();
         var fechaTimer = new Date(timersOrdenados[0].inicio);
         var diffMinutos = calcularDiferencia(addUnaHora(fechaInicioManual), fechaTimer)
@@ -154,7 +156,8 @@ socketIO.on('connection', (socket) => {
         var fecha = getHoursAndMinutes(timersOrdenados[0].inicio)
         //Manda ls fecha del primer timer y compreba si deberia empezar o no
         inicioTimer(fecha.hours, fecha.minutes, fecha.seconds, fecha.day, fecha.month, fecha.year)
-
+        clearInterval(intervaloComprovarHora);
+        intervaloComprovarHora = false;
         function inicioTimer(hora, minuto, seg, dia, mes, anio) {
 
             var fechaTimer = new Date();
