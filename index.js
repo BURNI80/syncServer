@@ -104,7 +104,7 @@ socketIO.on('connection', (socket) => {
 
 
     function syncData(fecha) {
-        if(corriendo === false){
+        // if(corriendo === false){
             // Muestra la hora del sistema donde esta hosteado
             //! **************************
     
@@ -128,7 +128,7 @@ socketIO.on('connection', (socket) => {
                 // console.log(timersOrdenados)
                 console.log("Timers sincronizados");
             })
-        }
+        // }
 
     }
 
