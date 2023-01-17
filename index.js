@@ -172,7 +172,7 @@ socketIO.on('connection', (socket) => {
             // if (fechaActualSync < fechaTimer) {
             //     syncData();
             // }
-            if (corriendo === false){
+            if (corriendo == false){
                 intervaloComprovarHora = setInterval(() => {
                     var fechaActual = addUnaHora(new Date());
                     console.log(fechaActual)
