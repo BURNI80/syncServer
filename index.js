@@ -156,8 +156,6 @@ socketIO.on('connection', (socket) => {
         var fecha = getHoursAndMinutes(timersOrdenados[0].inicio)
         //Manda ls fecha del primer timer y compreba si deberia empezar o no
         inicioTimer(fecha.hours, fecha.minutes, fecha.seconds, fecha.day, fecha.month, fecha.year)
-        clearInterval(intervaloComprovarHora);
-        intervaloComprovarHora = false;
         function inicioTimer(hora, minuto, seg, dia, mes, anio) {
 
             var fechaTimer = new Date();
@@ -178,7 +176,7 @@ socketIO.on('connection', (socket) => {
                     console.log(fechaActual)
                     console.log(fechaTimer)
                     console.log("----------------------------");
-                    if (fechaActual >= fechaTimer) {
+                    if (fechaTimer <= fechaActual) {
                         console.log("Empieza el timer");
                         clearInterval(intervaloComprovarHora);
                         intervaloComprovarHora = false;
