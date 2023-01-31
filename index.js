@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3002;
 // const PORT = 3002;
-const urlApi = "https://apitimersagc.azurewebsites.net/";
+const urlApi = "https://apitimersbcn.azurewebsites.net/";
 
 //New imports
 const http = require('http').Server(app);
